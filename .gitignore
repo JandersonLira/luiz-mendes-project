@@ -1,0 +1,11 @@
+# Python settings folders and files
+python_env/
+
+# VSCode settings
+.vscode/
+
+# Documentation folder
+documentation/
+
+# Images to debug and tests
+files/*.jpg
