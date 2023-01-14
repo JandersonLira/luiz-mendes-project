@@ -58,4 +58,7 @@ class FaceDetector:
             ]
             face_list.append(cropped_face)
 
-        return face_list
+        if len(face_list) != 0:
+            return [True, face_list]
+        else:
+            return [False, []]
