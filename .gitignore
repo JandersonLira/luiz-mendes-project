@@ -12,3 +12,4 @@ documentation/
 files/*.jpg
 */dataset_*/*/*.jpg
 data/app.log
+*.yml
