@@ -4,6 +4,9 @@ import os
 import cv2
 import json
 import pathlib
+import numpy as np
+
+from typing import List, Union
 
 import app_log
 
@@ -12,19 +15,17 @@ from face_detector import FaceDetector
 # path of this file
 POTH = pathlib.Path(__file__).parent.__str__() + '/'
 DATASET_CONFIG_FILE = POTH + '../data/dataset_config.json'
-CASCADE_MODEL_PATH = POTH + '../files/haarcascade_frontalface_default.xml'
 
 
-class DatasetGenerator:
-    """ DatasetGenerator
+class DatasetManager:
+    """ DatasetManager
     """
-    def __init__(self) -> None:
-        """__init__ DatasetGenerator constructor
+    def __init__(self, face_detector: FaceDetector) -> None:
+        """__init__ DatasetManager constructor
         """
         self.input_images = {}
         self.__dataset_info = {}
-        self.__face_detector = FaceDetector()
-        self.__face_detector.set_cascade_classifier(CASCADE_MODEL_PATH)
+        self.__face_detector = face_detector
 
     def set_input_images(self, src_path: pathlib.Path, user_id: str) -> None:
         """set_input_images Define image path of a specific
@@ -52,7 +53,7 @@ class DatasetGenerator:
         
         for input_image_path in pathlib.Path(src_path).iterdir():
             if not str(input_image_path) in self.__dataset_info[user_id]['faces'].keys():
-                found_faces, faces = self.__face_detector.get_face(input_image_path)
+                found_faces, faces = self.__face_detector.get_faces(input_image_path, scale_factor=1.3, min_neighbors=49)
                 if found_faces:
                     for face in faces:
                         img_path = str(user_path) + '/' + user_name + '.' + user_id + '.' + str(image_index) + '.jpg'
@@ -64,6 +65,28 @@ class DatasetGenerator:
                 app_log.logging.warning(f'Image already in dataset: {input_image_path}')
         
         self.__update_users_images()
+
+    def load_faces(self) -> Union[List[str], List[str]]:
+        """load_faces _summary_
+
+        Returns:
+            Union[List[str], List[str]]:
+                List[np.array]: List with loaded faces
+                List[str]: List with user ids of faces
+        """
+        self.__load_users_images()
+        
+        faces = []
+        user_ids = []
+
+        for user_id in self.__dataset_info.keys():
+            face_paths = self.__dataset_info[user_id]['faces'].values()
+            for face_path in face_paths:
+                color_img = cv2.imread(filename=face_path)
+                gray_img = np.array(cv2.cvtColor(src=color_img, code=cv2.COLOR_BGR2GRAY), 'uint8')
+                faces.append(gray_img)
+                user_ids.append(int(user_id))
+        return [faces, user_ids]
 
     def __load_users_images(self):
         """__load_users_images Load informations about
@@ -79,7 +102,6 @@ class DatasetGenerator:
             app_log.logging.info(f'Load dataset configuration file: {ds_file_name}')
         except Exception as ex:
             app_log.logging.error(f"Fail to load dataset configuration file ({ds_file_name}): {ex}")
-
 
     def __update_users_images(self):
         """__update_users_images Update informations about
