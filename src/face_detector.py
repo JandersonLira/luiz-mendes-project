@@ -30,11 +30,11 @@ class FaceDetector:
             haar_cascade_path
         )
     
-    def get_face(self, src_path: str) -> Union[bool, List[np.array]]:
+    def get_face(self, src_path: pathlib.Path) -> Union[bool, List[np.array]]:
         """get_face Get sub-images in image with faces identifieds
 
         Args:
-            src_path (str): Path of image
+            src_path (pathlib.Path): Path of image
 
         Returns:
             Union[bool, List[np.array]]:
@@ -44,11 +44,11 @@ class FaceDetector:
         """
         face_list = []
 
-        color_img = cv2.imread(filename=src_path)
+        color_img = cv2.imread(filename=str(src_path))
         gray_img = cv2.cvtColor(src=color_img, code=cv2.COLOR_BGR2GRAY)
 
         faces = self.cascade_classifier.detectMultiScale(
-            image=gray_img, scaleFactor=1.03, minNeighbors=5
+            image=gray_img, scaleFactor=1.03, minNeighbors=49
         )
         
         for (start_point_x, start_point_y, width, height) in faces:
