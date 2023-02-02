@@ -7,9 +7,12 @@ import numpy as np
 
 from typing import List, Union
 
-# path of this file
-POTH = pathlib.Path(__file__).parent.__str__()
+import app_log
 
+# path of this file
+POTH = pathlib.Path(__file__).parent.__str__() + '/'
+MODEL_PATH = POTH + '../data/trained_model.yml'
+CASCADE_MODEL_PATH = POTH + '../files/haarcascade_frontalface_default.xml'
 
 class FaceDetector:
     """ FaceDetector
@@ -17,17 +20,9 @@ class FaceDetector:
     def __init__(self):
         """__init__ FaceDetector constructor
         """
-        self.cascade_classifier = None
-
-    def set_cascade_classifier(self, haar_cascade_path: str):
-        """set_cascade_classifier set the c
-
-        Args:
-            haar_cascade_path (str): path of xml file with
-            Haar Cascade informations
-        """
-        self.cascade_classifier = cv2.CascadeClassifier(
-            haar_cascade_path
+        self.cascade_classifier = cv2.CascadeClassifier(CASCADE_MODEL_PATH)
+        self.__recognizer = cv2.face.LBPHFaceRecognizer_create(
+            radius=2, neighbors=16, grid_x=8, grid_y=8
         )
     
     def get_face(self, src_path: pathlib.Path) -> Union[bool, List[np.array]]:
@@ -62,3 +57,29 @@ class FaceDetector:
             return [True, face_list]
         else:
             return [False, []]
+
+    def start_training(self, user_ids: List[str], faces: List[np.array]) -> bool:
+        """start_training function to execute the training model
+
+        Args:
+            user_ids (List[str]): List of user ids
+            faces (List[np.array]): List of loaded faces
+
+        Returns:
+            bool: Status of training
+        """
+        try:
+            app_log.logging.info(f'Start training')
+            self.__recognizer.train(faces, np.array(user_ids))
+            app_log.logging.info(f'Finish training')
+            app_log.logging.info(f'Model trained successfully: {MODEL_PATH}')
+        except Exception as ex:
+            app_log.logging.error(f'Fail to training model: {ex}')
+            return False
+        
+        try:
+            self.__recognizer.write(MODEL_PATH)
+            app_log.logging.info(f'Trainded model file generated successfully: {MODEL_PATH}')
+            return True
+        except Exception as ex:
+            app_log.logging.error(f'Fail to generate trained model file: {ex}')
