@@ -1,5 +1,6 @@
 # Python settings folders and files
 python_env/
+*__pycache__*
 
 # VSCode settings
 .vscode/
@@ -9,3 +10,5 @@ documentation/
 
 # Images to debug and tests
 files/*.jpg
+*/dataset_*/*/*.jpg
+data/app.log
