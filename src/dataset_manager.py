@@ -53,7 +53,7 @@ class DatasetManager:
         
         for input_image_path in pathlib.Path(src_path).iterdir():
             if not str(input_image_path) in self.__dataset_info[user_id]['faces'].keys():
-                found_faces, faces = self.__face_detector.get_faces(input_image_path, scale_factor=1.3, min_neighbors=49)
+                found_faces, faces = self.__face_detector.get_face(input_image_path)
                 if found_faces:
                     for face in faces:
                         img_path = str(user_path) + '/' + user_name + '.' + user_id + '.' + str(image_index) + '.jpg'
@@ -121,3 +121,11 @@ class DatasetManager:
             ]
         }
         """
+    
+    def load_user_list(self) -> List[str]:
+        """load_user_list Load list with all user names
+
+        Returns:
+            Union[str]: List of user names
+        """
+        self.__load_users_images()

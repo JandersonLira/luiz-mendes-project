@@ -1,5 +1,7 @@
 # Python settings folders and files
 python_env/
+tcc_luiz_env/
+Face-Search-main/
 *__pycache__*
 
 # VSCode settings
