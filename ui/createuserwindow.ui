@@ -216,7 +216,7 @@
      <property name="title">
       <string>Normal com olhos abertos</string>
      </property>
-     <widget class="QFrame" name="frame_face_normal">
+     <widget class="QLabel" name="label_face_normal">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -271,7 +271,7 @@
      <property name="title">
       <string>Levemente para a esquerda</string>
      </property>
-     <widget class="QFrame" name="frame_face_left">
+     <widget class="QLabel" name="label_face_left">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -326,7 +326,7 @@
      <property name="title">
       <string>Levemente para a direita</string>
      </property>
-     <widget class="QFrame" name="frame_face_right">
+     <widget class="QLabel" name="label_face_right">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -381,7 +381,7 @@
      <property name="title">
       <string>Normal com os olhos fechados</string>
      </property>
-     <widget class="QFrame" name="frame_face_sleep">
+     <widget class="QLabel" name="label_face_sleep">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -436,7 +436,7 @@
      <property name="title">
       <string>Sorrindo de olhos abertos</string>
      </property>
-     <widget class="QFrame" name="frame_face_smiling">
+     <widget class="QLabel" name="label_face_smiling">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -491,7 +491,7 @@
      <property name="title">
       <string>Triste</string>
      </property>
-     <widget class="QFrame" name="frame_face_sad">
+     <widget class="QLabel" name="label_face_sad">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -534,7 +534,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_suprised">
+    <widget class="QGroupBox" name="gpbox_face_surprised">
      <property name="geometry">
       <rect>
        <x>930</x>
@@ -552,7 +552,7 @@
      <property name="flat">
       <bool>false</bool>
      </property>
-     <widget class="QFrame" name="frame_face_suprised">
+     <widget class="QLabel" name="label_face_surprised">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -568,7 +568,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_suprised_clear">
+     <widget class="QPushButton" name="btn_face_surprised_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -581,7 +581,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_suprised_capture">
+     <widget class="QPushButton" name="btn_face_surprised_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -616,7 +616,7 @@
      <property name="checked">
       <bool>false</bool>
      </property>
-     <widget class="QFrame" name="frame_face_glasses">
+     <widget class="QLabel" name="label_face_glasses">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -671,7 +671,7 @@
      <property name="title">
       <string>Raiva</string>
      </property>
-     <widget class="QFrame" name="frame_face_anger">
+     <widget class="QLabel" name="label_face_anger">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -726,7 +726,7 @@
      <property name="title">
       <string>Sorrindo de olhos fechados</string>
      </property>
-     <widget class="QFrame" name="frame_face_closed_eyes">
+     <widget class="QLabel" name="label_face_closed_eyes">
       <property name="geometry">
        <rect>
         <x>10</x>
