@@ -40,20 +40,6 @@ class CreateUserWindow(QtWidgets.QMainWindow):
                 'clear': self.btn_face_normal_clear
             },
             {
-				'face': 'left',
-                'label': self.label_face_left,
-                'frame': None,
-                'capture': self.btn_face_left_capture,
-                'clear': self.btn_face_left_clear
-            },
-            {
-				'face': 'right',
-                'label': self.label_face_right,
-                'frame': None,
-                'capture': self.btn_face_right_capture,
-                'clear': self.btn_face_right_clear
-            },
-            {
 				'face': 'sleep',
                 'label': self.label_face_sleep,
                 'frame': None,
@@ -68,11 +54,11 @@ class CreateUserWindow(QtWidgets.QMainWindow):
                 'clear': self.btn_face_smiling_clear
             },
             {
-				'face': 'sad',
-                'label': self.label_face_sad,
+				'face': 'closed_eyes',
+                'label': self.label_face_closed_eyes,
                 'frame': None,
-                'capture': self.btn_face_sad_capture,
-                'clear': self.btn_face_sad_clear
+                'capture': self.btn_face_closed_eyes_capture,
+                'clear': self.btn_face_closed_eyes_clear
             },
             {
 				'face': 'surprised',
@@ -82,11 +68,25 @@ class CreateUserWindow(QtWidgets.QMainWindow):
                 'clear': self.btn_face_surprised_clear
             },
             {
-				'face': 'glasses',
-                'label': self.label_face_glasses,
+				'face': 'left',
+                'label': self.label_face_left,
                 'frame': None,
-                'capture': self.btn_face_glasses_capture,
-                'clear': self.btn_face_glasses_clear
+                'capture': self.btn_face_left_capture,
+                'clear': self.btn_face_left_clear
+            },
+            {
+				'face': 'right',
+                'label': self.label_face_right,
+                'frame': None,
+                'capture': self.btn_face_right_capture,
+                'clear': self.btn_face_right_clear
+            },
+            {
+				'face': 'sad',
+                'label': self.label_face_sad,
+                'frame': None,
+                'capture': self.btn_face_sad_capture,
+                'clear': self.btn_face_sad_clear
             },
             {
 				'face': 'anger',
@@ -96,11 +96,11 @@ class CreateUserWindow(QtWidgets.QMainWindow):
                 'clear': self.btn_face_anger_clear
             },
             {
-				'face': 'closed_eyes',
-                'label': self.label_face_closed_eyes,
+				'face': 'glasses',
+                'label': self.label_face_glasses,
                 'frame': None,
-                'capture': self.btn_face_closed_eyes_capture,
-                'clear': self.btn_face_closed_eyes_clear
+                'capture': self.btn_face_glasses_capture,
+                'clear': self.btn_face_glasses_clear
             }
 		]
         for face in self.label_faces:
@@ -123,21 +123,22 @@ class CreateUserWindow(QtWidgets.QMainWindow):
 
     def init_ui(self):
         self.reset_label_faces()
+        self.set_current_face()
 
         regex = QtCore.QRegExp("[a-z-A-Z_]+")
         validator = QtGui.QRegExpValidator(regex)
         self.txt_user_name.setValidator(validator)
         self.txt_user_name.setMaxLength(100)
 
-        self.btn_capture_faces.clicked.connect(self.start_camera)
-        self.btn_cancel.clicked.connect(self.stop_camera)
+        self.btn_capture_faces.setEnabled(False)
+        # self.btn_cancel.clicked.connect(self.stop_camera)
     
     def start_camera(self):
         self.capture.start()
-        self.set_current_face()
     
     def stop_camera(self):
-        self.capture.stop()
+        # self.capture.stop()
+        pass
         
     def show_image(self, image, frame):
         if not self.capturing:
@@ -147,26 +148,24 @@ class CreateUserWindow(QtWidgets.QMainWindow):
             self.image = image
 
     def capture_face(self):
-        self.capturing = True
-        self.stop_camera()
-        QtTest.QTest.qWait(500)
-        print(self.current_face)
-        for face in self.label_faces:
-            if self.current_face == face['face']:
-                print(f"face - {face['face']}")
-                face['frame'] = copy.copy(self.frame)
-                self.set_current_face()
-                image = QtGui.QImage(face['frame'].data.tobytes(), 320, 243, QtGui.QImage.Format_RGB888)
-                face['label'].setPixmap(QtGui.QPixmap.fromImage(image))
-                self.start_camera()
-                self.capturing = False
-                QtTest.QTest.qWait(500)
-                face['capture'].setEnabled(False)
-                face['clear'].setEnabled(True)
-                return
-        self.start_camera()
-        QtTest.QTest.qWait(500)
-        self.capturing = False
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        if fileName:
+            for face in self.label_faces:
+                if self.current_face == face['face']:
+                    frame = cv2.imread(fileName, cv2.IMREAD_GRAYSCALE)
+                    
+                    face['frame'] = copy.copy(frame)
+                    self.set_current_face()
+
+                    pixmap = QtGui.QPixmap(fileName)
+                    pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+                    
+                    face['label'].setPixmap(pixmap)
+                    face['capture'].setEnabled(False)
+                    face['clear'].setEnabled(True)
+                    return
 
     def clear_face(self):
         pass
