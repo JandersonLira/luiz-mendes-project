@@ -13,26 +13,23 @@ Todas as 10 imagens de faces devem ser preenchidas.
 
 
 class CreateUserWindow(QtWidgets.QMainWindow):
-    def __init__(self, parent):
+    def __init__(self, parent, new_user, user_name=None):
         super(CreateUserWindow, self).__init__()
         uic.loadUi('ui/createuserwindow.ui', self)
         self.main_window = parent
-        self.user_manager = UserManager()        
-        self.face_list = {
-            'normal': None,
-            'sleepy': None,
-            'happy': None,
-            'wink': None,
-            'surprised': None,
-            'rightlight': None,
-            'leftlight': None,
-            'sad': None,
-            'centerlight': None,
-            'glasses': None
-        }
-
+        self.user_manager = UserManager()
+        if (not new_user) and self.user_manager.check_user(user_name):
+            self.new_user = False
+            self.user_name = user_name
+        else:
+            self.new_user = True
+            self.user_name = ""
+            
+        
+        self.face_list = {}
         self.create_global_variables_access_to_widgets()
         self.init_ui()
+
         self.show()
     
     def create_global_variables_access_to_widgets(self):
@@ -132,18 +129,49 @@ class CreateUserWindow(QtWidgets.QMainWindow):
                 lambda x, face_name=face_name: self.capture_face(face_name)
             )
             
-            globals()[f'btn_face_{face_name}_clear'].setEnabled(False)
             globals()[f'btn_face_{face_name}_clear'].clicked.connect(
                 lambda x, face_name=face_name: self.clear_face(face_name)
             )
 
+            if self.new_user:
+                globals()[f'btn_face_{face_name}_clear'].setEnabled(False)
+                globals()[f'btn_face_{face_name}_capture'].setEnabled(True)
+            else:
+                globals()[f'btn_face_{face_name}_clear'].setEnabled(True)
+                globals()[f'btn_face_{face_name}_capture'].setEnabled(False)
+
     def init_ui(self):
+        if self.new_user:
+            self.face_list = {
+                'normal': None,
+                'sleepy': None,
+                'happy': None,
+                'wink': None,
+                'surprised': None,
+                'rightlight': None,
+                'leftlight': None,
+                'sad': None,
+                'centerlight': None,
+                'glasses': None
+            }
+        else:
+            user_data = self.user_manager.read_user(user_name=self.user_name)
+
+            user_birthday = QtCore.QDate(
+                int(user_data['user_birthday'].split("/")[2]),
+                int(user_data['user_birthday'].split("/")[1]),
+                int(user_data['user_birthday'].split("/")[0])
+            )
+
+            self.date_user_birthday.setDate(user_birthday)
+            self.txt_user_name.setText(user_data['user_name'])
+            self.face_list = user_data['face_list']
+            self.fill_images_on_screen(self.face_list)
+        
         self.configure_reset_faces()
         self.txt_instructions_to_create.setText(INSTRUCTIONS)
 
         self.btn_input_rfid.setEnabled(False)
-
-        self.btn_save.clicked.connect(self.save_user)
 
         regex = QtCore.QRegExp("[a-zA-Z ]+")
         validator = QtGui.QRegExpValidator(regex)
@@ -159,34 +187,34 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         for face_name in self.face_list.keys():
             if self.face_list[face_name] is None:
                 faces_to_capture.append(face_name)
+
+        if len(faces_to_capture) == 0:
+            error_msg = "ERRO: Limpe as imagens que deseja substituir e depois faça a captura."
+            self.txt_instructions_to_create.setText(INSTRUCTIONS+error_msg)
+            return
+
         self.camera_window = CaptureImageToCreateUser(faces_to_capture)
-        self.camera_window.signals.close.connect(self.close_camera_window)
+        self.camera_window.signals.close.connect(self.fill_images_on_screen)
         self.camera_window.show()
         self.hide()
     
-    def close_camera_window(self, captured_images: dict):
-        captured_image_names = []
+    def fill_images_on_screen(self, captured_images: dict):
         for face_name in captured_images.keys():
-            if captured_images[face_name]['frame'] is not None:
-                captured_image_names.append(face_name)
+            self.face_list[face_name] = captured_images[face_name]
+            
+            globals()[f'btn_face_{face_name}_capture'].setEnabled(False)
+            globals()[f'btn_face_{face_name}_clear'].setEnabled(True)
+            
+            image = QtGui.QImage(
+                self.face_list[face_name],
+                self.face_list[face_name].shape[1],
+                self.face_list[face_name].shape[0],
+                QtGui.QImage.Format_RGB888
+            )
 
-        for face_name in self.face_list.keys():
-            if face_name in captured_image_names:
-                self.face_list[face_name] = captured_images[face_name]['frame']
-                
-                globals()[f'btn_face_{face_name}_capture'].setEnabled(False)
-                globals()[f'btn_face_{face_name}_clear'].setEnabled(True)
-                
-                image = QtGui.QImage(
-                    self.face_list[face_name],
-                    self.face_list[face_name].shape[1],
-                    self.face_list[face_name].shape[0],
-                    QtGui.QImage.Format_RGB888
-                )
-
-                pixmap =  QtGui.QPixmap.fromImage(image)
-                pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
-                globals()[f'label_face_{face_name}'].setPixmap(pixmap)
+            pixmap =  QtGui.QPixmap.fromImage(image)
+            pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+            globals()[f'label_face_{face_name}'].setPixmap(pixmap)
 
         self.show()
 
@@ -213,6 +241,9 @@ class CreateUserWindow(QtWidgets.QMainWindow):
     
     def save_user(self):
         error_msg = ""
+        if (not self.new_user) and (self.txt_user_name.text() != self.user_name):
+            error_msg += "ERRO: O nome do usuário não poder ser editado. Exclua o usuário e crie um novo com o nome correto.\n"
+
         if len(self.txt_user_name.text()) < 10:
             error_msg += "ERRO: Nome curto demais. O nome do usuário deve conter, pelo menos, 10 caracteres.\n"
 
@@ -225,15 +256,16 @@ class CreateUserWindow(QtWidgets.QMainWindow):
             self.txt_instructions_to_create.setText(INSTRUCTIONS+error_msg)
             return
 
+        user_data = {
+            'user_name': self.txt_user_name.text(),
+            'user_birthday': self.date_user_birthday.text(),
+            'user_faces': self.face_list
+        }
         result, msg = self.user_manager.create_user(
-            {
-                'user_name': "Janderson do Nascimento Lira",
-                'user_birthday': "05/07/1995",
-                'user_faces': self.face_list
-            }
+            user_data=user_data, new_user=self.new_user    
         )
-        print(msg)
-        
+
+        self.txt_instructions_to_create.setText(INSTRUCTIONS+msg)
         
 
     def closeEvent(self, event) -> None:

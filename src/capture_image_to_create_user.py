@@ -65,7 +65,6 @@ class Camera:
         self.vc.set(4, 480)  # set height
 
         if not self.vc.isOpened():
-            print('failure')
             msgBox = QMessageBox()
             msgBox.setText("Failed to open camera.")
             msgBox.exec_()
@@ -182,7 +181,9 @@ class CaptureImageToCreateUser(QWidget):
     
     def closeEvent(self, event):
         self.stop()
-        for face in self.capture_sequence.keys():
-            del self.capture_sequence[face]['msg']
 
-        self.signals.close.emit(self.capture_sequence)
+        face_list = {}
+        for face in self.capture_sequence.keys():
+            face_list[face] = self.capture_sequence[face]['frame']
+        
+        self.signals.close.emit(face_list)

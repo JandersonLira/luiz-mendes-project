@@ -45,7 +45,7 @@
       <string>Nome do Usuário</string>
      </property>
     </widget>
-    <widget class="QDateEdit" name="user_birthday">
+    <widget class="QDateEdit" name="date_user_birthday">
      <property name="geometry">
       <rect>
        <x>115</x>

@@ -13,5 +13,20 @@
             "data/new_yale_faces/JandersonDoNascimentoLira_centerlight.png",
             "data/new_yale_faces/JandersonDoNascimentoLira_glasses.png"
         ]
+    },
+    "AnaAliceOliveira": {
+        "user_birthday": "20/04/1999",
+        "user_faces": [
+            "data/new_yale_faces/AnaAliceOliveira_normal.png",
+            "data/new_yale_faces/AnaAliceOliveira_sleepy.png",
+            "data/new_yale_faces/AnaAliceOliveira_happy.png",
+            "data/new_yale_faces/AnaAliceOliveira_wink.png",
+            "data/new_yale_faces/AnaAliceOliveira_surprised.png",
+            "data/new_yale_faces/AnaAliceOliveira_rightlight.png",
+            "data/new_yale_faces/AnaAliceOliveira_leftlight.png",
+            "data/new_yale_faces/AnaAliceOliveira_sad.png",
+            "data/new_yale_faces/AnaAliceOliveira_centerlight.png",
+            "data/new_yale_faces/AnaAliceOliveira_glasses.png"
+        ]
     }
 }
