@@ -1,0 +1,17 @@
+{
+    "JandersonDoNascimentoLira": {
+        "user_birthday": "05/07/1995",
+        "user_faces": [
+            "data/new_yale_faces/JandersonDoNascimentoLira_normal.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_sleepy.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_happy.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_wink.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_surprised.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_rightlight.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_leftlight.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_sad.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_centerlight.png",
+            "data/new_yale_faces/JandersonDoNascimentoLira_glasses.png"
+        ]
+    }
+}

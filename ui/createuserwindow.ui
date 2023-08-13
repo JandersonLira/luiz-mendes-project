@@ -259,7 +259,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_left">
+    <widget class="QGroupBox" name="gpbox_face_rightlight">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -271,7 +271,7 @@
      <property name="title">
       <string>Levemente para a esquerda</string>
      </property>
-     <widget class="QLabel" name="label_face_left">
+     <widget class="QLabel" name="label_face_rightlight">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -287,7 +287,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_left_clear">
+     <widget class="QPushButton" name="btn_face_rightlight_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -300,7 +300,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_left_capture">
+     <widget class="QPushButton" name="btn_face_rightlight_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -314,7 +314,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_right">
+    <widget class="QGroupBox" name="gpbox_face_leftlight">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -326,7 +326,7 @@
      <property name="title">
       <string>Levemente para a direita</string>
      </property>
-     <widget class="QLabel" name="label_face_right">
+     <widget class="QLabel" name="label_face_leftlight">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -342,7 +342,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_right_clear">
+     <widget class="QPushButton" name="btn_face_leftlight_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -355,7 +355,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_right_capture">
+     <widget class="QPushButton" name="btn_face_leftlight_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -369,7 +369,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_sleep">
+    <widget class="QGroupBox" name="gpbox_face_sleepy">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -381,7 +381,7 @@
      <property name="title">
       <string>Normal com os olhos fechados</string>
      </property>
-     <widget class="QLabel" name="label_face_sleep">
+     <widget class="QLabel" name="label_face_sleepy">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -397,7 +397,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_sleep_clear">
+     <widget class="QPushButton" name="btn_face_sleepy_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -410,7 +410,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_sleep_capture">
+     <widget class="QPushButton" name="btn_face_sleepy_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -424,7 +424,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_smiling">
+    <widget class="QGroupBox" name="gpbox_face_happy">
      <property name="geometry">
       <rect>
        <x>470</x>
@@ -436,7 +436,7 @@
      <property name="title">
       <string>Sorrindo de olhos abertos</string>
      </property>
-     <widget class="QLabel" name="label_face_smiling">
+     <widget class="QLabel" name="label_face_happy">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -452,7 +452,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_smiling_clear">
+     <widget class="QPushButton" name="btn_face_happy_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -465,7 +465,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_smiling_capture">
+     <widget class="QPushButton" name="btn_face_happy_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -659,7 +659,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_anger">
+    <widget class="QGroupBox" name="gpbox_face_centerlight">
      <property name="geometry">
       <rect>
        <x>700</x>
@@ -671,7 +671,7 @@
      <property name="title">
       <string>Raiva</string>
      </property>
-     <widget class="QLabel" name="label_face_anger">
+     <widget class="QLabel" name="label_face_centerlight">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -687,7 +687,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_anger_clear">
+     <widget class="QPushButton" name="btn_face_centerlight_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -700,7 +700,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_anger_capture">
+     <widget class="QPushButton" name="btn_face_centerlight_capture">
       <property name="geometry">
        <rect>
         <x>114</x>
@@ -714,7 +714,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="gpbox_face_closed_eyes">
+    <widget class="QGroupBox" name="gpbox_face_wink">
      <property name="geometry">
       <rect>
        <x>700</x>
@@ -726,7 +726,7 @@
      <property name="title">
       <string>Sorrindo de olhos fechados</string>
      </property>
-     <widget class="QLabel" name="label_face_closed_eyes">
+     <widget class="QLabel" name="label_face_wink">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -742,7 +742,7 @@
        <enum>QFrame::Plain</enum>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_closed_eyes_clear">
+     <widget class="QPushButton" name="btn_face_wink_clear">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -755,7 +755,7 @@
        <string>Limpar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="btn_face_closed_eyes_capture">
+     <widget class="QPushButton" name="btn_face_wink_capture">
       <property name="geometry">
        <rect>
         <x>114</x>

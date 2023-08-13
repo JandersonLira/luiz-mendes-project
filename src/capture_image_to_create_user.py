@@ -12,15 +12,15 @@ ALL_FACES = {
         "msg": "Capture uma foto séria e de olhos abertos.",
         "frame": None
     },
-    "sleep": {
+    "sleepy": {
         "msg": "Capture uma foto séria e de olhos fechados.",
         "frame": None
     },
-    "smiling": {
+    "happy": {
         "msg": "Capture uma foto sorrindo e de olhos anertos.",
         "frame": None
     },
-    "closed_eyes": {
+    "wink": {
         "msg": "Capture uma foto sorrindo e de olhos fechados.",
         "frame": None
     },
@@ -28,11 +28,11 @@ ALL_FACES = {
         "msg": "Capture uma foto esboçando a reação de surpresa.",
         "frame": None
     },
-    "left": {
+    "rightlight": {
         "msg": "Capture uma foto com o rosto levemente voltado para a esquerda.",
         "frame": None
     },
-    "right": {
+    "leftlight": {
         "msg": "Capture uma foto com o rosto levemente voltado para a direita.",
         "frame": None
     },
@@ -40,7 +40,7 @@ ALL_FACES = {
         "msg": "Capture uma foto esboçando a reação de tristeza.",
         "frame": None
     },
-    "anger": {
+    "centerlight": {
         "msg": "Capture uma foto esboçando a reação de raiva.",
         "frame": None
     },
@@ -138,6 +138,10 @@ class CaptureImageToCreateUser(QWidget):
             if self.capture_sequence[face]['frame'] is None:
                 self.face_to_capture = face
                 self.info_label.setText(self.capture_sequence[face]['msg'])
+                return
+        
+        self.info_label.setText("Fim das capturas de imagens para treinamento.")
+        self.btn_to_capture.setEnabled(False)
 
     def start(self):
         self.btn_open_camera.setEnabled(False)

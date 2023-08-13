@@ -1,13 +1,13 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, uic
 
 execution_dir = os.getcwd()
 sys.path.append(execution_dir)
 
-from traininglogswindow import StartTrainingNetworkWindow
-from createuserwindow import CreateUserWindow
+from training_logs_window import StartTrainingNetworkWindow
+from create_user_window import CreateUserWindow
 
 
 class MainWindow(QtWidgets.QMainWindow):

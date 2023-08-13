@@ -1,10 +1,10 @@
 import cv2
 import copy
-import time
 
-from PyQt5 import QtCore, QtWidgets, QtGui, QtTest, QtGui, uic
+from PyQt5 import QtCore, QtWidgets, QtGui, QtGui, uic
 
-from captureimagetocreateuser import CaptureImageToCreateUser
+from capture_image_to_create_user import CaptureImageToCreateUser
+from user_manager import UserManager
 
 INSTRUCTIONS = """O nome do usuário deve ter entre 10 e 100 caracteres.
 Todas as 10 imagens de faces devem ser preenchidas.
@@ -17,17 +17,17 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         super(CreateUserWindow, self).__init__()
         uic.loadUi('ui/createuserwindow.ui', self)
         self.main_window = parent
-        
+        self.user_manager = UserManager()        
         self.face_list = {
             'normal': None,
-            'sleep': None,
-            'smiling': None,
-            'closed_eyes': None,
+            'sleepy': None,
+            'happy': None,
+            'wink': None,
             'surprised': None,
-            'left': None,
-            'right': None,
+            'rightlight': None,
+            'leftlight': None,
             'sad': None,
-            'anger': None,
+            'centerlight': None,
             'glasses': None
         }
 
@@ -45,32 +45,32 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         global label_face_normal
         label_face_normal = self.label_face_normal
 
-        global btn_face_sleep_capture
-        btn_face_sleep_capture = self.btn_face_sleep_capture
+        global btn_face_sleepy_capture
+        btn_face_sleepy_capture = self.btn_face_sleepy_capture
 
-        global btn_face_sleep_clear
-        btn_face_sleep_clear = self.btn_face_sleep_clear
+        global btn_face_sleepy_clear
+        btn_face_sleepy_clear = self.btn_face_sleepy_clear
 
-        global label_face_sleep
-        label_face_sleep = self.label_face_sleep
+        global label_face_sleepy
+        label_face_sleepy = self.label_face_sleepy
 
-        global btn_face_smiling_capture
-        btn_face_smiling_capture = self.btn_face_smiling_capture
+        global btn_face_happy_capture
+        btn_face_happy_capture = self.btn_face_happy_capture
 
-        global btn_face_smiling_clear
-        btn_face_smiling_clear = self.btn_face_smiling_clear
+        global btn_face_happy_clear
+        btn_face_happy_clear = self.btn_face_happy_clear
 
-        global label_face_smiling
-        label_face_smiling = self.label_face_smiling
+        global label_face_happy
+        label_face_happy = self.label_face_happy
 
-        global btn_face_closed_eyes_capture
-        btn_face_closed_eyes_capture = self.btn_face_closed_eyes_capture
+        global btn_face_wink_capture
+        btn_face_wink_capture = self.btn_face_wink_capture
 
-        global btn_face_closed_eyes_clear
-        btn_face_closed_eyes_clear = self.btn_face_closed_eyes_clear
+        global btn_face_wink_clear
+        btn_face_wink_clear = self.btn_face_wink_clear
 
-        global label_face_closed_eyes
-        label_face_closed_eyes = self.label_face_closed_eyes
+        global label_face_wink
+        label_face_wink = self.label_face_wink
 
         global btn_face_surprised_capture
         btn_face_surprised_capture = self.btn_face_surprised_capture
@@ -81,23 +81,23 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         global label_face_surprised
         label_face_surprised = self.label_face_surprised
 
-        global btn_face_left_capture
-        btn_face_left_capture = self.btn_face_left_capture
+        global btn_face_rightlight_capture
+        btn_face_rightlight_capture = self.btn_face_rightlight_capture
 
-        global btn_face_left_clear
-        btn_face_left_clear = self.btn_face_left_clear
+        global btn_face_rightlight_clear
+        btn_face_rightlight_clear = self.btn_face_rightlight_clear
 
-        global label_face_left
-        label_face_left = self.label_face_left
+        global label_face_rightlight
+        label_face_rightlight = self.label_face_rightlight
 
-        global btn_face_right_capture
-        btn_face_right_capture = self.btn_face_right_capture
+        global btn_face_leftlight_capture
+        btn_face_leftlight_capture = self.btn_face_leftlight_capture
 
-        global btn_face_right_clear
-        btn_face_right_clear = self.btn_face_right_clear
+        global btn_face_leftlight_clear
+        btn_face_leftlight_clear = self.btn_face_leftlight_clear
 
-        global label_face_right
-        label_face_right = self.label_face_right
+        global label_face_leftlight
+        label_face_leftlight = self.label_face_leftlight
 
         global btn_face_sad_capture
         btn_face_sad_capture = self.btn_face_sad_capture
@@ -108,14 +108,14 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         global label_face_sad
         label_face_sad = self.label_face_sad
 
-        global btn_face_anger_capture
-        btn_face_anger_capture = self.btn_face_anger_capture
+        global btn_face_centerlight_capture
+        btn_face_centerlight_capture = self.btn_face_centerlight_capture
 
-        global btn_face_anger_clear
-        btn_face_anger_clear = self.btn_face_anger_clear
+        global btn_face_centerlight_clear
+        btn_face_centerlight_clear = self.btn_face_centerlight_clear
 
-        global label_face_anger
-        label_face_anger = self.label_face_anger
+        global label_face_centerlight
+        label_face_centerlight = self.label_face_centerlight
 
         global btn_face_glasses_capture
         btn_face_glasses_capture = self.btn_face_glasses_capture
@@ -131,7 +131,8 @@ class CreateUserWindow(QtWidgets.QMainWindow):
             globals()[f'btn_face_{face_name}_capture'].clicked.connect(
                 lambda x, face_name=face_name: self.capture_face(face_name)
             )
-
+            
+            globals()[f'btn_face_{face_name}_clear'].setEnabled(False)
             globals()[f'btn_face_{face_name}_clear'].clicked.connect(
                 lambda x, face_name=face_name: self.clear_face(face_name)
             )
@@ -144,13 +145,14 @@ class CreateUserWindow(QtWidgets.QMainWindow):
 
         self.btn_save.clicked.connect(self.save_user)
 
-        regex = QtCore.QRegExp("[a-z-A-Z_]+")
+        regex = QtCore.QRegExp("[a-zA-Z ]+")
         validator = QtGui.QRegExpValidator(regex)
         self.txt_user_name.setValidator(validator)
         self.txt_user_name.setMaxLength(100)
 
         self.btn_capture_faces.setEnabled(True)
         self.btn_capture_faces.clicked.connect(self.capture_process)
+        self.btn_save.clicked.connect(self.save_user)
     
     def capture_process(self):
         faces_to_capture = []
@@ -214,13 +216,23 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         if len(self.txt_user_name.text()) < 10:
             error_msg += "ERRO: Nome curto demais. O nome do usuário deve conter, pelo menos, 10 caracteres.\n"
 
-        if None in list(self.face_list.values()):
-            error_msg += "ERRO: É necessário capturar todas 10 faces para registar usuário.\n"
-        
+        for frame in self.face_list.values():
+            if frame is None:
+                error_msg += "ERRO: É necessário capturar todas 10 faces para registar usuário.\n"
+                break
+
         if error_msg:
-            self.txt_user_name.setText(INSTRUCTIONS+error_msg)
+            self.txt_instructions_to_create.setText(INSTRUCTIONS+error_msg)
             return
 
+        result, msg = self.user_manager.create_user(
+            {
+                'user_name': "Janderson do Nascimento Lira",
+                'user_birthday': "05/07/1995",
+                'user_faces': self.face_list
+            }
+        )
+        print(msg)
         
         
 
