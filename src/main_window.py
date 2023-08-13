@@ -1,7 +1,7 @@
 import os
 import sys
 
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtGui, QtWidgets, uic
 
 execution_dir = os.getcwd()
 sys.path.append(execution_dir)
@@ -30,8 +30,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.hide()
 
     def start_create_user(self):
-        self.start_create_user_window = CreateUserWindow(parent=self, new_user=True)
-        self.start_create_user_window.show()
+        self.start_create_update_user_window = CreateUserWindow(parent=self, new_user=True)
+        self.start_create_update_user_window.show()
         self.hide()
 
     def start_list_user(self):

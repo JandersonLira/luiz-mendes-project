@@ -60,13 +60,12 @@ class Camera:
 
     def openCamera(self):
         self.vc = cv2.VideoCapture(0)
-        # vc.set(5, 30)  #set FPS
-        self.vc.set(3, 640)  # set width
-        self.vc.set(4, 480)  # set height
+        self.vc.set(3, 640)
+        self.vc.set(4, 480)
 
         if not self.vc.isOpened():
             msgBox = QMessageBox()
-            msgBox.setText("Failed to open camera.")
+            msgBox.setText("Falha ao abrir a câmera.")
             msgBox.exec_()
             return
     

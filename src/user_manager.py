@@ -24,7 +24,7 @@ class UserManager:
             with open(self.users_file) as file:
                 self.user_db = json.load(file)
     
-    def create_user(self, user_data, new_user):
+    def create_update_user(self, user_data, new_user):
         unformatted_user_name = user_data['user_name']
         user_birthday = user_data['user_birthday']
         user_faces = user_data['user_faces']
@@ -88,6 +88,17 @@ class UserManager:
             user_data[formatted_name] = self.user_db[user_name]['user_birthday']
         
         return user_data
+
+    def delete_user(self, user_name):
+        formatted_user_name = ""
+        for part_name in user_name.split(" "):
+            formatted_user_name += part_name[0].upper()+part_name[1:].lower()
+
+        for face_path in self.user_db[formatted_user_name]['user_faces']:
+            os.remove(face_path)
+
+        del self.user_db[formatted_user_name]
+        self.commit_changes()
 
     def commit_changes(self):
         with open(self.users_file, 'w') as file:

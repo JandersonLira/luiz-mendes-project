@@ -181,6 +181,7 @@ class CreateUserWindow(QtWidgets.QMainWindow):
         self.btn_capture_faces.setEnabled(True)
         self.btn_capture_faces.clicked.connect(self.capture_process)
         self.btn_save.clicked.connect(self.save_user)
+        self.btn_cancel.clicked.connect(self.close)
     
     def capture_process(self):
         faces_to_capture = []
@@ -261,7 +262,7 @@ class CreateUserWindow(QtWidgets.QMainWindow):
             'user_birthday': self.date_user_birthday.text(),
             'user_faces': self.face_list
         }
-        result, msg = self.user_manager.create_user(
+        result, msg = self.user_manager.create_update_user(
             user_data=user_data, new_user=self.new_user    
         )
 

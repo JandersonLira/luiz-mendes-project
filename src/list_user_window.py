@@ -22,6 +22,8 @@ class ListUserWindow(QtWidgets.QMainWindow):
         self.fill_user_table()
         self.table_user_list.cellClicked.connect(self.update_focused_user_name)
         self.btn_user_update.clicked.connect(self.update_user)
+        self.btn_user_delete.clicked.connect(self.delete_user)
+        self.btn_back_page.clicked.connect(self.close)
     
     def fill_user_table(self):
         user_data = self.user_manager.read_user_data()
@@ -46,9 +48,38 @@ class ListUserWindow(QtWidgets.QMainWindow):
 
     def update_user(self):
         if self.focused_user_name is not None:
-            self.create_user_window = CreateUserWindow(
+            self.create_update_user_window = CreateUserWindow(
                 parent=self.main_window, new_user=False, user_name=self.focused_user_name
             )
-            self.create_user_window.show()
+            self.create_update_user_window.show()
             self.hide()
+    
+    def delete_user(self):
+        if self.focused_user_name is None:
+            return
+
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setIcon(QtWidgets.QMessageBox.Information)
+        msgBox.setText("Deseja realmente excluir este usuário?")
+        msgBox.setWindowTitle("Excluir usuário")
+        msgBox.setStandardButtons(QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+        
+        btn_yes = msgBox.button(QtWidgets.QMessageBox.Yes)
+        btn_yes.setText('Sim')
+        btn_no = msgBox.button(QtWidgets.QMessageBox.No)
+        btn_no.setText('Não')
+        
+        returnValue = msgBox.exec()
+        if returnValue == QtWidgets.QMessageBox.Yes:
+            self.user_manager.delete_user(self.focused_user_name)
+            while (self.table_user_list.rowCount() > 0):
+                self.table_user_list.removeRow(0)
+            self.table_user_list.setRowCount(0)
+            self.fill_user_table()
+        else:
+            print('Não excluir')
+    
+    def closeEvent(self, event) -> None:
+        self.main_window.show()
+        self.hide()
 
