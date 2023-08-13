@@ -178,7 +178,7 @@
     <property name="title">
      <string>Instruções para cadastro</string>
     </property>
-    <widget class="QTextEdit" name="txt_create_instructions">
+    <widget class="QTextEdit" name="txt_instructions_to_create">
      <property name="geometry">
       <rect>
        <x>10</x>

@@ -12,8 +12,8 @@ from createuserwindow import CreateUserWindow
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
-        super(MainWindow, self).__init__() # Call the inherited classes __init__ method
-        uic.loadUi('ui/mainwindow.ui', self) # Load the .ui file
+        super(MainWindow, self).__init__()
+        uic.loadUi('ui/mainwindow.ui', self)
         self.init_ui()
 
         self.show()
