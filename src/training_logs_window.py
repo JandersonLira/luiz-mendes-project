@@ -15,7 +15,9 @@ from PyQt5.QtGui import QTextCursor
 from insightface.app import FaceAnalysis
 from sklearn.neighbors import NearestNeighbors
 
-TRAIN_DATASET_DIR = "data/new_yale_faces"
+TRAIN_DATASET_DIR = 'data/new_yale_faces'
+TRAINED_MODEL_FILE = 'src/faceID_model.pkl'
+TRAINED_LABELS_FILE = 'src/faceID_model_labels.npy'
 
 execution_dir = os.getcwd()
 sys.path.append(execution_dir)
@@ -149,9 +151,12 @@ class TrainingThread(QtCore.QRunnable):
         # Optional - saving and loading model
         # save the model to disk
         self.output_logger.append('Save file of model - START')
-        filename = 'faceID_model.pkl'
-        with open(filename, 'wb') as file:
+        with open(TRAINED_MODEL_FILE, 'wb') as file:
             pickle.dump(self.nn, file)
+
+        with open(TRAINED_LABELS_FILE, 'wb') as file:
+            np.save(file, np.array(self.evaluation_labels))
+
         self.output_logger.append('Save file of model - FINISH')
         
     def make_inference(self):

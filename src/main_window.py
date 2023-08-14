@@ -9,6 +9,7 @@ sys.path.append(execution_dir)
 from training_logs_window import StartTrainingNetworkWindow
 from create_user_window import CreateUserWindow
 from list_user_window import ListUserWindow
+from identify_faces import IdentifyFaces
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -21,6 +22,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def init_ui(self):
         self.btn_train_network.clicked.connect(self.start_train_network)
+        self.btn_start_app.clicked.connect(self.start_app)
         self.action_user_create.triggered.connect(self.start_create_user)
         self.action_user_list.triggered.connect(self.start_list_user)
     
@@ -37,6 +39,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def start_list_user(self):
         self.start_list_user_window = ListUserWindow(parent=self)
         self.start_list_user_window.show()
+        self.hide()
+
+    def start_list_user(self):
+        self.start_list_user_window = ListUserWindow(parent=self)
+        self.start_list_user_window.show()
+        self.hide()
+    
+    def start_app(self):
+        self.identify_faces = IdentifyFaces(parent=self)
+        self.identify_faces.show()
         self.hide()
 
 
