@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui, QtGui, uic
 
 from create_user_window import CreateUserWindow
 from user_manager import UserManager
+from ui.listuserwindow import Ui_MainWindow
 
 INSTRUCTIONS = """O nome do usuário deve ter entre 10 e 100 caracteres.
 Todas as 10 imagens de faces devem ser preenchidas.
@@ -9,10 +10,10 @@ Todas as 10 imagens de faces devem ser preenchidas.
 """
 
 
-class ListUserWindow(QtWidgets.QMainWindow):
+class ListUserWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent):
         super(ListUserWindow, self).__init__()
-        uic.loadUi('ui/listuserwindow.ui', self)
+        self.setupUi(self)
         self.main_window = parent
         self.user_manager = UserManager()
         self.focused_user_name = None

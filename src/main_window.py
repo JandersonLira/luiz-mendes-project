@@ -11,13 +11,13 @@ from create_user_window import CreateUserWindow
 from list_user_window import ListUserWindow
 from identify_faces import IdentifyFaces
 
+from ui.mainwindow import Ui_MainWindow
 
-class MainWindow(QtWidgets.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('ui/mainwindow.ui', self)
+        self.setupUi(self)
         self.init_ui()
-
         self.show()
     
     def init_ui(self):

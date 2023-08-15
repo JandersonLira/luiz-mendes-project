@@ -14,6 +14,7 @@ from PyQt5.QtGui import QTextCursor
 
 from insightface.app import FaceAnalysis
 from sklearn.neighbors import NearestNeighbors
+from ui.traininglogswindow import Ui_MainWindow
 
 TRAIN_DATASET_DIR = 'data/new_yale_faces'
 TRAINED_MODEL_FILE = 'src/faceID_model.pkl'
@@ -180,11 +181,10 @@ class TrainingThread(QtCore.QRunnable):
         p_at_k.mean()
         self.output_logger.append('Evaluate metrics - FINISH')
 
-class StartTrainingNetworkWindow(QtWidgets.QMainWindow):
+class StartTrainingNetworkWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent):
         super(StartTrainingNetworkWindow, self).__init__()
-        uic.loadUi('ui/traininglogswindow.ui', self)
-
+        self.setupUi(self)
         self.main_window = parent
 
         self.btn_back_page.setEnabled(False)

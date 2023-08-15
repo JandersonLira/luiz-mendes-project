@@ -15,6 +15,7 @@ TRAINED_LABELS_FILE = 'src/faceID_model_labels.npy'
 CONFIABILITY = 0.95
 DIMENSION = (320, 243)
 
+
 class Camera:
     def __init__(self, camera):
         self.camera = camera

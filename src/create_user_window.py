@@ -1,10 +1,11 @@
 import cv2
 import copy
 
-from PyQt5 import QtCore, QtWidgets, QtGui, QtGui, uic
+from PyQt5 import QtCore, QtWidgets, QtGui, QtGui
 
 from capture_image_to_create_user import CaptureImageToCreateUser
 from user_manager import UserManager
+from ui.createuserwindow import Ui_CreateUserWindow
 
 INSTRUCTIONS = """O nome do usuário deve ter entre 10 e 100 caracteres.
 Todas as 10 imagens de faces devem ser preenchidas.
@@ -12,10 +13,10 @@ Todas as 10 imagens de faces devem ser preenchidas.
 """
 
 
-class CreateUserWindow(QtWidgets.QMainWindow):
+class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
     def __init__(self, parent, new_user, user_name=None):
         super(CreateUserWindow, self).__init__()
-        uic.loadUi('ui/createuserwindow.ui', self)
+        self.setupUi(self)
         self.main_window = parent
         self.user_manager = UserManager()
         if (not new_user) and self.user_manager.check_user(user_name):
