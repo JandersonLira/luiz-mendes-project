@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.gpbox_user_list.setGeometry(QtCore.QRect(10, 10, 580, 280))
         self.gpbox_user_list.setObjectName("gpbox_user_list")
         self.table_user_list = QtWidgets.QTableWidget(self.gpbox_user_list)
-        self.table_user_list.setGeometry(QtCore.QRect(10, 20, 560, 250))
+        self.table_user_list.setGeometry(QtCore.QRect(0, 30, 560, 250))
         self.table_user_list.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.table_user_list.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.table_user_list.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
@@ -35,13 +35,13 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.table_user_list.setHorizontalHeaderItem(2, item)
         self.btn_user_update = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_user_update.setGeometry(QtCore.QRect(600, 20, 90, 25))
+        self.btn_user_update.setGeometry(QtCore.QRect(600, 40, 90, 25))
         self.btn_user_update.setObjectName("btn_user_update")
         self.btn_user_delete = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_user_delete.setGeometry(QtCore.QRect(600, 50, 90, 25))
+        self.btn_user_delete.setGeometry(QtCore.QRect(600, 70, 90, 25))
         self.btn_user_delete.setObjectName("btn_user_delete")
         self.btn_back_page = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_back_page.setGeometry(QtCore.QRect(600, 80, 90, 25))
+        self.btn_back_page.setGeometry(QtCore.QRect(600, 100, 90, 25))
         self.btn_back_page.setObjectName("btn_back_page")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -50,6 +50,11 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        
+        SrcSize = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen())
+        frmX = (SrcSize.width() - MainWindow.width())/2
+        frmY = (SrcSize.height() - MainWindow.height())/2
+        MainWindow.move(frmX, frmY)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

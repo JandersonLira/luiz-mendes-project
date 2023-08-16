@@ -67,7 +67,7 @@ class TrainingThread(QtCore.QRunnable):
     def insightface_model(self):
         self.output_logger.append("Prepare Insightface model - START")
         try:
-            self.face_app = FaceAnalysis(providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+            self.face_app = FaceAnalysis(providers=['CPUExecutionProvider'])
             self.face_app.prepare(ctx_id=0, det_size=(640, 640))
             self.output_logger.append("Prepare Insightface model - FINSH")
             return True

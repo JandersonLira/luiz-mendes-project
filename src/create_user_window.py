@@ -202,6 +202,9 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
     
     def fill_images_on_screen(self, captured_images: dict):
         for face_name in captured_images.keys():
+            if captured_images[face_name] is None:
+                continue
+
             self.face_list[face_name] = captured_images[face_name]
             
             globals()[f'btn_face_{face_name}_capture'].setEnabled(False)

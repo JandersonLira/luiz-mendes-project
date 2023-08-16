@@ -1,6 +1,7 @@
 # Python settings folders and files
 python_env/
 tcc_luiz_env/
+tcc_luiz/
 Face-Search-main/
 *__pycache__*
 

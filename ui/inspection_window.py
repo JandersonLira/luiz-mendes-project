@@ -35,6 +35,11 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        
+        SrcSize = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen())
+        frmX = (SrcSize.width() - MainWindow.width())/2
+        frmY = (SrcSize.height() - MainWindow.height())/2
+        MainWindow.move(frmX, frmY)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

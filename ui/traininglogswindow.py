@@ -18,14 +18,14 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.qpbox_training_logs = QtWidgets.QGroupBox(self.centralwidget)
-        self.qpbox_training_logs.setGeometry(QtCore.QRect(10, 10, 621, 361))
+        self.qpbox_training_logs.setGeometry(QtCore.QRect(10, 10, 621, 371))
         self.qpbox_training_logs.setObjectName("qpbox_training_logs")
         self.txt_training_logs = QtWidgets.QTextEdit(self.qpbox_training_logs)
-        self.txt_training_logs.setGeometry(QtCore.QRect(10, 20, 601, 331))
+        self.txt_training_logs.setGeometry(QtCore.QRect(0, 30, 620, 310))
         self.txt_training_logs.setReadOnly(True)
         self.txt_training_logs.setObjectName("txt_training_logs")
         self.btn_back_page = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_back_page.setGeometry(QtCore.QRect(270, 375, 100, 25))
+        self.btn_back_page.setGeometry(QtCore.QRect(270, 355, 100, 25))
         self.btn_back_page.setObjectName("btn_back_page")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -34,6 +34,11 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        
+        SrcSize = QtGui.QScreen.availableGeometry(QtWidgets.QApplication.primaryScreen())
+        frmX = (SrcSize.width() - MainWindow.width())/2
+        frmY = (SrcSize.height() - MainWindow.height())/2
+        MainWindow.move(frmX, frmY)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

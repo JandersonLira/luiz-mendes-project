@@ -46,16 +46,17 @@ class Signals(QObject):
 class MakeInference(QRunnable):
     def __init__(self):
         super(MakeInference, self).__init__()
-
-        self.model_app = FaceAnalysis(providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        print("1")
+        self.model_app = FaceAnalysis(providers=['CPUExecutionProvider'])
+        print("2")
         self.model_app.prepare(ctx_id=0, det_size=(640, 640))
-
+        print("3")
         with open(TRAINED_MODEL_FILE, 'rb') as file:
             self.model = pickle.load(file, encoding='utf-8')
-
+        print("4")
         with open(TRAINED_LABELS_FILE, 'rb') as file:
             self.model_labels = np.load(TRAINED_LABELS_FILE)
-
+        print("5")
         self.signals = Signals()
         self.frame = None
         self.execute = True
