@@ -27,6 +27,7 @@ class UserManager:
     def create_update_user(self, user_data, new_user):
         unformatted_user_name = user_data['user_name']
         user_birthday = user_data['user_birthday']
+        user_rfid = user_data['user_rfid']
         user_faces = user_data['user_faces']
 
         formatted_user_name = ""
@@ -48,6 +49,7 @@ class UserManager:
         
         self.user_db[formatted_user_name] = {
             'user_birthday': user_birthday,
+            'user_rfid': user_rfid,
             'user_faces': user_faces_paths
         }
         self.commit_changes()
@@ -77,15 +79,20 @@ class UserManager:
         user_data = {
             'user_name': user_name,
             'user_birthday': self.user_db[formatted_user_name]['user_birthday'],
+            'user_rfid': self.user_db[formatted_user_name]['user_rfid'],
             'face_list': face_list
         }
         return user_data
 
     def read_user_data(self):
         user_data = {}
+        print(self.user_db)
         for user_name in self.user_db.keys():
             formatted_name = " ".join(re.findall('[A-Z][^A-Z]*', user_name))
-            user_data[formatted_name] = self.user_db[user_name]['user_birthday']
+            user_data[formatted_name] = {
+                'user_birthday': self.user_db[user_name]['user_birthday'],
+                'user_rfid': self.user_db[user_name]['user_rfid']
+            }
         
         return user_data
 

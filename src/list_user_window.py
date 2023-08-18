@@ -40,8 +40,11 @@ class ListUserWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             item_user_name = QtWidgets.QTableWidgetItem(user_name)
             self.table_user_list.setItem(row, 0, item_user_name)
 
-            item_user_birthday = QtWidgets.QTableWidgetItem(user_data[user_name])
+            item_user_birthday = QtWidgets.QTableWidgetItem(user_data[user_name]['user_birthday'])
             self.table_user_list.setItem(row, 1, item_user_birthday)
+            
+            item_user_rfid = QtWidgets.QTableWidgetItem(str(user_data[user_name]['user_rfid']))
+            self.table_user_list.setItem(row, 2, item_user_rfid)
 
     def update_focused_user_name(self, row, column):
         user_name_item = self.table_user_list.item(row, 0)

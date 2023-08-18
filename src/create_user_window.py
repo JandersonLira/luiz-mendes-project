@@ -1,6 +1,7 @@
 import cv2
 import copy
 
+from mfrc522 import SimpleMFRC522
 from PyQt5 import QtCore, QtWidgets, QtGui, QtGui
 
 from capture_image_to_create_user import CaptureImageToCreateUser
@@ -11,7 +12,22 @@ INSTRUCTIONS = """O nome do usuário deve ter entre 10 e 100 caracteres.
 Todas as 10 imagens de faces devem ser preenchidas.
 
 """
-
+class ReadRFID(QtCore.QObject):
+    rfid_found = QtCore.pyqtSignal(int)
+    def __init__(self):
+        super(ReadRFID, self).__init__()
+        self.execute = True
+        self.MIFAREReader = SimpleMFRC522()
+        
+    def run(self):
+        while self.execute:
+            rfid_id = self.MIFAREReader.read()[0]
+            if rfid_id:
+                self.rfid_found.emit(rfid_id)
+    
+    def stop(self):
+        self.execute = False
+                                
 
 class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
     def __init__(self, parent, new_user, user_name=None):
@@ -166,13 +182,12 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
 
             self.date_user_birthday.setDate(user_birthday)
             self.txt_user_name.setText(user_data['user_name'])
+            self.txt_user_rfid.setText(str(user_data['user_rfid']))
             self.face_list = user_data['face_list']
             self.fill_images_on_screen(self.face_list)
         
         self.configure_reset_faces()
         self.txt_instructions_to_create.setText(INSTRUCTIONS)
-
-        self.btn_input_rfid.setEnabled(False)
 
         regex = QtCore.QRegExp("[a-zA-Z ]+")
         validator = QtGui.QRegExpValidator(regex)
@@ -183,6 +198,21 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
         self.btn_capture_faces.clicked.connect(self.capture_process)
         self.btn_save.clicked.connect(self.save_user)
         self.btn_cancel.clicked.connect(self.close)
+        self.btn_input_rfid.clicked.connect(self.read_rfid)
+    
+    def read_rfid(self):
+        self.thread = QtCore.QThread()
+        self.rfid_worker = ReadRFID()
+        self.rfid_worker.moveToThread(self.thread)
+        self.thread.started.connect(self.rfid_worker.run)
+        self.rfid_worker.rfid_found.connect(self.rfid_found)
+        self.btn_input_rfid.setEnabled(False)
+        self.thread.start()
+    
+    def rfid_found(self, rfid_id):
+        self.rfid_worker.stop()
+        self.txt_user_rfid.setText(str(rfid_id))
+        self.btn_input_rfid.setEnabled(False)
     
     def capture_process(self):
         faces_to_capture = []
@@ -251,6 +281,9 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
 
         if len(self.txt_user_name.text()) < 10:
             error_msg += "ERRO: Nome curto demais. O nome do usuário deve conter, pelo menos, 10 caracteres.\n"
+        
+        if len(self.txt_user_rfid.text()) == 0:
+            error_msg += "ERRO: É necessário cadastrar uma TAG RFID para o usuário"
 
         for frame in self.face_list.values():
             if frame is None:
@@ -264,7 +297,8 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
         user_data = {
             'user_name': self.txt_user_name.text(),
             'user_birthday': self.date_user_birthday.text(),
-            'user_faces': self.face_list
+            'user_faces': self.face_list,
+            'user_rfid': int(self.txt_user_rfid.text())
         }
         result, msg = self.user_manager.create_update_user(
             user_data=user_data, new_user=self.new_user    
