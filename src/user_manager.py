@@ -86,7 +86,6 @@ class UserManager:
 
     def read_user_data(self):
         user_data = {}
-        print(self.user_db)
         for user_name in self.user_db.keys():
             formatted_name = " ".join(re.findall('[A-Z][^A-Z]*', user_name))
             user_data[formatted_name] = {

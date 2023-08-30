@@ -30,7 +30,7 @@ while continue_reading:
  
     # If we have the UID, continue
     if uid:
-        my_uid = 454270145892
+        my_uid = 851463960629
         
         #Configure LED Output Pin
         LED = 18

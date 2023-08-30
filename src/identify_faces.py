@@ -22,6 +22,40 @@ TRAINED_LABELS_FILE = 'src/faceID_model_labels.npy'
 CONFIABILITY = 0.95
 DIMENSION = (320, 243)
 
+class RFIDReader(QRunnable):
+    def __init__(self):
+        super(RFIDReader, self).__init__()
+        self.execute = True
+        
+        user_manager = UserManager()
+        user_data = user_manager.read_user_data()
+        self.rfid_list = []
+        for user_name in user_data.keys():
+            self.rfid_list.append(user_data[user_name]['user_rfid'])
+
+        self.MIFAREReader = SimpleMFRC522()
+        self.LED = 18
+        GPIO.setup(self.LED, GPIO.OUT)
+        GPIO.output(self.LED, GPIO.LOW)
+    
+    def stop(self):
+        self.execute = False
+    
+    def enable_access(self):
+        GPIO.output(self.LED, GPIO.HIGH)
+        time.sleep(5)
+        GPIO.output(self.LED, GPIO.LOW)   #Turn off LED
+    
+    def run(self):
+        while self.execute:
+            uid = self.MIFAREReader.read()[0]
+            if uid:
+                if uid in self.rfid_list:
+                    print("Access Granted")
+                    self.enable_access()
+                else:
+                    print("Access Denied, YOU SHALL NOT PASS!")
+
 class Camera:
     def __init__(self, camera):
         self.camera = camera
@@ -50,48 +84,27 @@ class Signals(QObject):
     result = pyqtSignal(bool, str, float)
 
 class MakeInference(QRunnable):
-    def __init__(self):
+    def __init__(self, rfid_reader):
         super(MakeInference, self).__init__()
+        
         self.model_app = FaceAnalysis(providers=['CPUExecutionProvider'])
         self.model_app.prepare(ctx_id=0, det_size=(640, 640))
         with open(TRAINED_MODEL_FILE, 'rb') as file:
             self.model = pickle.load(file, encoding='utf-8')
         with open(TRAINED_LABELS_FILE, 'rb') as file:
             self.model_labels = np.load(TRAINED_LABELS_FILE)
+        
+        self.rfid_reader = rfid_reader
         self.signals = Signals()
         self.frame = None
         self.execute = True
-
-        user_manager = UserManager()
-        user_data = user_manager.read_user_data()
-        self.rfid_list = []
-        for user_name in user_data.keys():
-            self.rfid_list.append(user_data[user_name]['user_rfid'])
-
-        self.MIFAREReader = SimpleMFRC522()
-        self.LED = 18
-        GPIO.setup(self.LED, GPIO.OUT)
-        GPIO.output(self.LED, GPIO.LOW)
     
     def stop(self):
         self.execute = False
     
-    def compare_rfid(self, uid):
-        if uid in self.rfid_list:                #Open the Doggy Door if matching UIDs
-            print("Access Granted")
-            GPIO.output(self.LED, GPIO.HIGH)  #Turn on LED
-            time.sleep(5)                #Wait 5 Seconds
-            GPIO.output(self.LED, GPIO.LOW)   #Turn off LED
-        else:                            #Don't open if UIDs don't match
-            print("Access Denied, YOU SHALL NOT PASS!")
-
     def run(self):
         while self.execute:
             
-            uid = self.MIFAREReader.read()[0]
-            if uid:
-                self.compare_rfid(uid=uid)
-
             if self.frame is None:
                 continue
             try:
@@ -108,9 +121,13 @@ class MakeInference(QRunnable):
                 user_name, confiability = sorted(zip(pred_labels, dists[0]), key=lambda x: x[1], reverse=True)[0]
                 formatted_name = " ".join(re.findall('[A-Z][^A-Z]*', user_name))
                 confiability =  float("{:.2f}".format(confiability*100))
+                if confiability >= 0.80:
+                    print("Access Granted")
+                    self.rfid_reader.enable_access()
                 self.signals.result.emit(True, formatted_name, confiability)
             except Exception as ex:
-                print("Falha")
+                print("Face não encontrada")
+            
             
 
 class IdentifyFaces(QWidget):
@@ -120,7 +137,8 @@ class IdentifyFaces(QWidget):
         self.main_window = parent
         self.camera = Camera(0)
         self.timer = QTimer()
-        self.make_inference = MakeInference()
+        self.rfid_reader = RFIDReader()
+        self.make_inference = MakeInference(self.rfid_reader)
         self.info_label = QLabel("")
         self.init_ui()
         self.start()
@@ -148,9 +166,12 @@ class IdentifyFaces(QWidget):
         self.camera.openCamera()
         self.timer.start(int(1000. / 24))
 
-        pool = QThreadPool.globalInstance()
+        camera_pool = QThreadPool.globalInstance()
         self.make_inference.signals.result.connect(self.result_inference)
-        pool.start(self.make_inference)
+        camera_pool.start(self.make_inference)
+        
+        # rfid_pool = QThreadPool.globalInstance()
+        # rfid_pool.start(self.rfid_reader)
     
     def result_inference(self, result, user_name, confiability):
         if result:

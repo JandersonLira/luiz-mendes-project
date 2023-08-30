@@ -198,6 +198,7 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
         self.btn_capture_faces.clicked.connect(self.capture_process)
         self.btn_save.clicked.connect(self.save_user)
         self.btn_cancel.clicked.connect(self.close)
+        self.btn_input_rfid.setEnabled(True)
         self.btn_input_rfid.clicked.connect(self.read_rfid)
     
     def read_rfid(self):
@@ -212,7 +213,7 @@ class CreateUserWindow(QtWidgets.QMainWindow, Ui_CreateUserWindow):
     def rfid_found(self, rfid_id):
         self.rfid_worker.stop()
         self.txt_user_rfid.setText(str(rfid_id))
-        self.btn_input_rfid.setEnabled(False)
+        self.btn_input_rfid.setEnabled(True)
     
     def capture_process(self):
         faces_to_capture = []
